@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 const ContactMePage = () => {
   const [formData, setFormData] = useState({
@@ -14,31 +15,28 @@ const ContactMePage = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Validate that all fields are filled
     if (!formData.name || !formData.email || !formData.tel) {
-      alert("Please fill in all the required fields.");
+      toast.error("Please fill in all the required fields.");
       return;
     }
-
-    // Save user's contact details to local storage
-    localStorage.setItem("contactDetails", JSON.stringify(formData));
-
-    // Send SMS to the phone number
-    const message = `Hello from ${formData.name}`;
-    sendSMS(formData.tel, message);
-
-    // Show thank you message to the user
-    alert(`Thank you ${formData.name}`);
-  };
-
-  const sendSMS = (phoneNumber, message) => {
-    // Assume you have a function to send an SMS using an API or some service
-    // You can implement this function based on your backend or third-party service
-    // Example: sendSMSFunction(phoneNumber, message);
-    console.log(`Sending SMS to ${phoneNumber}: ${message}`);
+    try {
+      const response = await fetch("http://localhost:8080/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        toast.success(result.message || "Message sent successfully!");
+        setFormData({ name: "", email: "", tel: "" });
+      } else {
+        toast.error(result.message || "Failed to send message");
+      }
+    } catch (error) {
+      toast.error("Failed to send message");
+    }
   };
 
   return (

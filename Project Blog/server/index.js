@@ -48,9 +48,11 @@ app.use((req, res, next) => {
 });
 
 // Routes
+import contactRoute from "./routes/contact.js";
 app.use("/api/auth", authRoute);
 app.use("/api/posts", postRoute);
 app.use("/api/comments", commentRoute);
+app.use("/api/contact", contactRoute);
 
 // Fetch all posts and popular posts
 app.get("/api/posts", async (req, res) => {
