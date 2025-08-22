@@ -7,9 +7,19 @@ import {
   removePost,
   updatePost,
   getPostComments,
+  likePost,
+  unlikePost,
 } from "../controllers/posts.js";
 import { checkAuth } from "../utils/checkAuth.js";
 const router = new Router();
+
+// Like Post
+// http://localhost:8080/api/posts/:id/like
+router.post("/:id/like", checkAuth, likePost);
+
+// Unlike Post
+// http://localhost:8080/api/posts/:id/unlike
+router.post("/:id/unlike", checkAuth, unlikePost);
 
 // Create Post
 // http://localhost:8080/api/posts

@@ -31,12 +31,18 @@ export const PostPage = () => {
   const dispatch = useDispatch();
 
   const removePostHandler = () => {
-    try {
-      dispatch(removePost(params.id));
-      toast("The post has been deleted");
-      navigate("/posts");
-    } catch (error) {
-      console.log(error);
+    if (
+      window.confirm(
+        "Are you sure you want to delete this post? This action cannot be undone."
+      )
+    ) {
+      try {
+        dispatch(removePost(params.id));
+        toast("The post has been deleted");
+        navigate("/posts");
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -95,7 +101,7 @@ export const PostPage = () => {
               >
                 {post?.imgUrl && (
                   <img
-                    src={`http://localhost:8080/${post.imgUrl}`}
+                    src={`http://localhost:8080/uploads/${post.imgUrl}`}
                     alt="img"
                     className="object-cover w-full rounded-2xl"
                   />

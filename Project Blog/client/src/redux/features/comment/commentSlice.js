@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "../../../utils/axios";
+import { apiCreateComment, apiGetPostComments } from "../../api/comment";
 
 const initialState = {
   comments: [],
@@ -10,11 +10,7 @@ export const createComment = createAsyncThunk(
   "comment/createComment",
   async ({ postId, comment }) => {
     try {
-      const { data } = await axios.post(`/comments/${postId}`, {
-        postId,
-        comment,
-      });
-      return data;
+      return await apiCreateComment({ postId, comment });
     } catch (error) {
       console.log(error);
     }
@@ -25,8 +21,7 @@ export const getPostComments = createAsyncThunk(
   "comment/getPostComments",
   async (postId) => {
     try {
-      const { data } = await axios.get(`/posts/comments/${postId}`);
-      return data;
+      return await apiGetPostComments(postId);
     } catch (error) {
       console.log(error);
     }

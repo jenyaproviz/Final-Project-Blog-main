@@ -8,6 +8,7 @@ export const RegisterPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [adminCode, setAdminCode] = useState("");
+  const [showAdmin, setShowAdmin] = useState(false);
   const { status } = useSelector((state) => state.auth);
   const isAuth = useSelector(checkIsAuth);
   const navigate = useNavigate();
@@ -22,10 +23,7 @@ export const RegisterPage = () => {
 
   const handleSubmit = () => {
     try {
-      const isAdmin = adminCode === "admin"; // Check if this line captures the adminCode correctly
-      dispatch(
-        registerUser({ username, password, adminCode: isAdmin ? "admin" : "" })
-      );
+      dispatch(registerUser({ username, password, adminCode }));
       setPassword("");
       setUsername("");
       setAdminCode("");
@@ -39,7 +37,7 @@ export const RegisterPage = () => {
       <form />
       <form
         onSubmit={(e) => e.preventDefault()}
-        className="w-full max-w-md mx-auto mt-20 px-4 py-8 bg-gray-800 rounded-lg shadow-md flex flex-col gap-4"
+        className="w-full max-w-md mx-auto mt-10 px-2 sm:px-4 py-8 bg-gray-900 rounded-xl shadow-xl border border-gray-700 flex flex-col gap-6"
       >
         <h1 className="text-lg text-white text-center">Registration</h1>
 
@@ -53,7 +51,7 @@ export const RegisterPage = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             placeholder="Username"
-            className="m-1 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-xs outline-none placeholder:text-gray-700"
+            className="mt-1 text-black w-full rounded-lg bg-gray-200 border border-gray-400 py-2 px-3 text-base outline-none placeholder:text-gray-500 focus:ring-2 focus:ring-blue-400"
           />
         </label>
 
@@ -67,36 +65,49 @@ export const RegisterPage = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
-            className="m-1 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-xs outline-none placeholder:text-gray-700"
+            className="mt-1 text-black w-full rounded-lg bg-gray-200 border border-gray-400 py-2 px-3 text-base outline-none placeholder:text-gray-500 focus:ring-2 focus:ring-blue-400"
           />
         </label>
 
-        <label className="text-xs text-gray-400">
-          Admin Code:
-          <input
-            type="text"
-            id="adminCode"
-            value={adminCode}
-            onChange={(e) => setAdminCode(e.target.value)}
-            placeholder="Admin Code"
-            className="m-1 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-xs outline-none placeholder:text-gray-700"
-          />
-        </label>
+        <button
+          type="button"
+          className="text-xs text-blue-300 underline mb-2 self-start"
+          onClick={() => setShowAdmin((prev) => !prev)}
+        >
+          {showAdmin ? "Hide Admin Registration" : "Register as Admin?"}
+        </button>
+
+        {showAdmin && (
+          <label className="text-xs text-gray-400">
+            Admin Code:
+            <input
+              type="text"
+              id="adminCode"
+              value={adminCode}
+              onChange={(e) => setAdminCode(e.target.value)}
+              placeholder="Enter Admin Code (leave blank for regular user)"
+              className="mt-1 text-black w-full rounded-lg bg-gray-200 border border-gray-400 py-2 px-3 text-base outline-none placeholder:text-gray-500 focus:ring-2 focus:ring-blue-400"
+            />
+            <span className="text-xs text-gray-500 block mt-1">
+              Only fill this if you want to register as an admin.
+            </span>
+          </label>
+        )}
 
         <div className="flex gap-8 justify-center mt-4">
           <button
             type="submit"
             onClick={handleSubmit}
-            className="flex justify-center items-center text-xs bg-gray-600 text-white rounded-lg py-2 px-4"
+            className="flex justify-center items-center bg-blue-600 hover:bg-blue-700 transition-all text-base text-white rounded-lg py-2 px-6 shadow-md"
           >
-            Confirm
+            Register
           </button>
 
           <Link
             to="/login"
-            className="flex justify-center items-center text-xs text-white"
+            className="flex justify-center items-center bg-gray-600 hover:bg-gray-700 transition-all text-base text-white rounded-lg py-2 px-6 shadow-md"
           >
-            Sign Up
+            Sign In
           </Link>
         </div>
       </form>

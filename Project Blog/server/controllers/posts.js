@@ -1,3 +1,35 @@
+// Like a post
+export const likePost = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const userId = req.userId;
+    const post = await Post.findById(postId);
+    if (!post) return res.status(404).json({ message: "Post not found." });
+    if (post.likes.includes(userId)) {
+      return res.status(400).json({ message: "Already liked." });
+    }
+    post.likes.push(userId);
+    await post.save();
+    res.json({ likes: post.likes.length });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong." });
+  }
+};
+
+// Unlike a post
+export const unlikePost = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const userId = req.userId;
+    const post = await Post.findById(postId);
+    if (!post) return res.status(404).json({ message: "Post not found." });
+    post.likes = post.likes.filter((id) => id.toString() !== userId);
+    await post.save();
+    res.json({ likes: post.likes.length });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong." });
+  }
+};
 import Post from "../models/Post.js";
 import User from "../models/User.js";
 import Comment from "../models/Comment.js";

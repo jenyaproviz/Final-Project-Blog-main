@@ -1,5 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "../../../utils/axios";
+import {
+  apiCreatePost,
+  apiGetAllPosts,
+  apiRemovePost,
+  apiUpdatePost,
+} from "../../api/posts";
 
 const initialState = {
   posts: [],
@@ -11,8 +16,7 @@ export const createPost = createAsyncThunk(
   "post/createPost",
   async (params) => {
     try {
-      const { data } = await axios.post("/posts", params);
-      return data;
+      return await apiCreatePost(params);
     } catch (error) {
       console.log(error);
     }
@@ -21,9 +25,7 @@ export const createPost = createAsyncThunk(
 
 export const getAllPosts = createAsyncThunk("post/getAllPosts", async () => {
   try {
-    const { data } = await axios.get("/posts");
-
-    return data;
+    return await apiGetAllPosts();
   } catch (error) {
     console.log(error);
   }
@@ -31,8 +33,7 @@ export const getAllPosts = createAsyncThunk("post/getAllPosts", async () => {
 
 export const removePost = createAsyncThunk("post/removePost", async (id) => {
   try {
-    const { data } = await axios.delete(`/posts/${id}`, id);
-    return data;
+    return await apiRemovePost(id);
   } catch (error) {
     console.log(error);
   }
@@ -42,8 +43,7 @@ export const updatePost = createAsyncThunk(
   "post/updatePost",
   async (updatedPost) => {
     try {
-      const { data } = await axios.put(`/posts/${updatedPost.id}`, updatedPost);
-      return data;
+      return await apiUpdatePost(updatedPost);
     } catch (error) {
       console.log(error);
     }
