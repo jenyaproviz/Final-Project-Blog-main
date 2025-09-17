@@ -67,7 +67,14 @@ export const PostPage = () => {
   }, [post, dispatch]);
 
   const fetchPost = useCallback(async () => {
-    const { data } = await axios.get(`/posts/slug/${params.slug}`);
+    let data;
+    if (params.slug && isNaN(Number(params.slug))) {
+      // If the param is a slug (not a number/id)
+      ({ data } = await axios.get(`/posts/slug/${params.slug}`));
+    } else {
+      // If the param is an id
+      ({ data } = await axios.get(`/posts/${params.slug}`));
+    }
     setPost(data);
   }, [params.slug]);
 
