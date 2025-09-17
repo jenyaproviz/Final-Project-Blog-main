@@ -1,3 +1,24 @@
+// Get Post By Slug
+export const getBySlug = async (req, res) => {
+  try {
+    const post = await Post.findOneAndUpdate(
+      { slug: req.params.slug },
+      { $inc: { views: 1 } },
+      { new: true }
+    )
+      .populate("author")
+      .populate({
+        path: "comments",
+        populate: { path: "author" },
+      });
+    if (!post) {
+      return res.status(404).json({ message: "Post not found." });
+    }
+    res.json(post);
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong." });
+  }
+};
 // Like a post
 export const likePost = async (req, res) => {
   try {
@@ -31,6 +52,20 @@ export const unlikePost = async (req, res) => {
   }
 };
 import Post from "../models/Post.js";
+// Helper to generate a slug from a string
+function slugify(text) {
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')           // Replace spaces with -
+    .replace(/&/g, '-and-')          // Replace & with 'and'
+    .replace(/[\u0300-\u036f]/g, '') // Remove accents
+    .replace(/[^a-z0-9-]/g, '')      // Remove all non-word chars
+    .replace(/--+/g, '-')            // Replace multiple - with single -
+    .replace(/^-+/, '')              // Trim - from start of text
+    .replace(/-+$/, '');             // Trim - from end of text
+}
 import User from "../models/User.js";
 import Comment from "../models/Comment.js";
 import path, { dirname } from "path";
@@ -42,6 +77,7 @@ export const createPost = async (req, res) => {
     const { title, text } = req.body;
     const user = await User.findById(req.userId);
 
+    const slug = slugify(title || Date.now().toString());
     if (req.files) {
       let fileName = Date.now().toString() + req.files.image.name;
       const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -53,6 +89,7 @@ export const createPost = async (req, res) => {
         text,
         imgUrl: fileName,
         author: req.userId,
+        slug,
       });
 
       await newPostWithImage.save();
@@ -69,6 +106,7 @@ export const createPost = async (req, res) => {
       text,
       imgUrl: "",
       author: req.userId,
+      slug,
     });
     await newPostWithoutImage.save();
     await User.findByIdAndUpdate(req.userId, {

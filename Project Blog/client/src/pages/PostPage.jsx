@@ -37,7 +37,7 @@ export const PostPage = () => {
       )
     ) {
       try {
-        dispatch(removePost(params.id));
+        dispatch(removePost(post._id));
         toast("The post has been deleted");
         navigate("/posts");
       } catch (error) {
@@ -48,7 +48,7 @@ export const PostPage = () => {
 
   const handleSubmit = () => {
     try {
-      const postId = params.id;
+      const postId = post._id;
       dispatch(createComment({ postId, comment }));
       setComment("");
     } catch (error) {
@@ -58,16 +58,18 @@ export const PostPage = () => {
 
   const fetchComments = useCallback(async () => {
     try {
-      dispatch(getPostComments(params.id));
+      if (post?._id) {
+        dispatch(getPostComments(post._id));
+      }
     } catch (error) {
       console.log(error);
     }
-  }, [params.id, dispatch]);
+  }, [post, dispatch]);
 
   const fetchPost = useCallback(async () => {
-    const { data } = await axios.get(`/posts/${params.id}`);
+    const { data } = await axios.get(`/posts/slug/${params.slug}`);
     setPost(data);
-  }, [params.id]);
+  }, [params.slug]);
 
   useEffect(() => {
     fetchPost();
@@ -75,7 +77,7 @@ export const PostPage = () => {
 
   useEffect(() => {
     fetchComments();
-  }, [fetchComments]);
+  }, [fetchComments, post]);
 
   if (!post) {
     return (
@@ -172,7 +174,7 @@ export const PostPage = () => {
           </div>
         </div>
       </div>
-      /
+      
     </div>
   );
 };

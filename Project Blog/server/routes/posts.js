@@ -29,6 +29,12 @@ router.post("/", checkAuth, createPost);
 // http://localhost:8080/api/posts
 router.get("/", getAll);
 
+
+// Get Post By Slug
+// http://localhost:8080/api/posts/slug/:slug
+import { getBySlug } from "../controllers/posts.js";
+router.get("/slug/:slug", getBySlug);
+
 // Get Post By Id
 // http://localhost:8080/api/posts/:id
 router.get("/:id", getById);

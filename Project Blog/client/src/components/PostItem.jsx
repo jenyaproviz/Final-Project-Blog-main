@@ -25,7 +25,7 @@ export const PostItem = ({ post }) => {
   }, [post]);
 
   return (
-    <Link to={post ? `/${post._id}` : "#"}>
+  <Link to={post ? `/post/${post.slug}` : "#"}>
       <div className="flex flex-col basis-1/4 flex-grow transition-all duration-300 hover:scale-[1.02] hover:shadow-lg">
         {showDeletedMessage && (
           <div className="text-xl text-center text-white py-10">
