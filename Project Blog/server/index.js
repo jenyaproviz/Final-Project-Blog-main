@@ -70,12 +70,14 @@ app.get("/api/posts", async (req, res) => {
 // Connect to MongoDB and start the server
 async function start() {
   try {
-    await mongoose.connect(`mongodb://localhost:27017/${DB_NAME}`, {
+    // Use MONGODB_URI from environment if available, otherwise fallback to localhost
+    const mongoUri = process.env.MONGODB_URI || `mongodb://localhost:27017/${DB_NAME}`;
+    await mongoose.connect(mongoUri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
 
-    console.log(chalk.greenBright("Connected to MongoDB"));
+    console.log(chalk.greenBright(`Connected to MongoDB at: ${mongoUri}`));
 
     app.listen(PORT, () =>
       console.log(chalk.blueBright(`Server started on port: ${PORT}`))

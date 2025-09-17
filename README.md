@@ -45,8 +45,9 @@ cd ../client
 npm install
 ```
 
+
 ### 3. Environment Variables
-Create a `.env` file in `server/` with at least:
+Create a `.env` file in `server/` for local development with at least:
 ```
 PORT=8080
 DB_USER=root
@@ -56,6 +57,13 @@ ADMIN_CODE=admin
 JWT_SECRET=1234567890
 ACCESS_KEY=VITE_API_KEY
 ```
+
+#### For Cloud Deployment (Render.com or similar):
+- Create a MongoDB Atlas cluster and get your connection string (e.g. `mongodb+srv://<user>:<password>@cluster0.mongodb.net/<dbname>?retryWrites=true&w=majority`).
+- In your Render service, add an environment variable:
+	- **Key:** `MONGODB_URI`
+	- **Value:** (your MongoDB Atlas connection string)
+- This will override the local MongoDB connection and connect your app to the cloud database.
 
 ### 4. Start the project
 #### Start the server
