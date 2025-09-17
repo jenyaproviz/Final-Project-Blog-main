@@ -1,4 +1,9 @@
 {
+	"name": "final-project-blog-main",
+	"private": true,
+	"scripts": {
+		"start": "cd \"Project Blog/server\" && npm start"
+	},
 	"dependencies": {
 		"bcrypt": "^5.1.1",
 		"chalk": "^5.3.0",

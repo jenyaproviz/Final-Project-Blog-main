@@ -14,6 +14,17 @@ Project Blog/
 	server/    # Express backend
 ```
 
+
+## Deploying to Render.com
+
+If deploying to Render.com, set the following in your Render service:
+- **Build Command:** `npm install --prefix "Project Blog/server" && npm install --prefix "Project Blog/client"`
+- **Start Command:** `npm start`
+
+This will run the backend server. If you want to deploy the frontend separately, use the client folder and its own start/build scripts.
+
+---
+
 ## Setup Instructions
 
 ### 1. Clone the repository
