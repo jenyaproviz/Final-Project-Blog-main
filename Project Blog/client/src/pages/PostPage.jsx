@@ -37,7 +37,7 @@ export const PostPage = () => {
       )
     ) {
       try {
-        dispatch(removePost(post._id));
+        dispatch(removePost(params.id));
         toast("The post has been deleted");
         navigate("/posts");
       } catch (error) {
@@ -48,7 +48,7 @@ export const PostPage = () => {
 
   const handleSubmit = () => {
     try {
-      const postId = post._id;
+      const postId = params.id;
       dispatch(createComment({ postId, comment }));
       setComment("");
     } catch (error) {
@@ -58,25 +58,16 @@ export const PostPage = () => {
 
   const fetchComments = useCallback(async () => {
     try {
-      if (post?._id) {
-        dispatch(getPostComments(post._id));
-      }
+      dispatch(getPostComments(params.id));
     } catch (error) {
       console.log(error);
     }
-  }, [post, dispatch]);
+  }, [params.id, dispatch]);
 
   const fetchPost = useCallback(async () => {
-    let data;
-    if (params.slug && isNaN(Number(params.slug))) {
-      // If the param is a slug (not a number/id)
-      ({ data } = await axios.get(`/posts/slug/${params.slug}`));
-    } else {
-      // If the param is an id
-      ({ data } = await axios.get(`/posts/${params.slug}`));
-    }
+    const { data } = await axios.get(`/posts/${params.id}`);
     setPost(data);
-  }, [params.slug]);
+  }, [params.id]);
 
   useEffect(() => {
     fetchPost();
@@ -84,7 +75,7 @@ export const PostPage = () => {
 
   useEffect(() => {
     fetchComments();
-  }, [fetchComments, post]);
+  }, [fetchComments]);
 
   if (!post) {
     return (

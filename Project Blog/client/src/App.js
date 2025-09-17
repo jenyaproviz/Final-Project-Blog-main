@@ -29,8 +29,8 @@ function App() {
         <Route path="/" element={<MainPage />} />
         <Route path="/mainPosts" element={<MainPostsPage />} />
         <Route path="posts" element={<PostsPage />} />
-  <Route path="post/:slug" element={<PostPage />} />
-  <Route path="post/:slug/edit" element={<EditPostPage />} />
+        <Route path=":id" element={<PostPage />} />
+        <Route path=":id/edit" element={<EditPostPage />} />
         <Route path="new" element={<AddPostPage />} />
         <Route path="register" element={<RegisterPage />} />
         <Route path="login" element={<LoginPage />} />
